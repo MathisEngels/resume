@@ -50,8 +50,8 @@ jobs:
           sudo sed -i "s/$SRC/$RPL/" /etc/ImageMagick-6/policy.xml
       - name: Convert PDF to PNG
         run: |
-          convert -background white -alpha off Resume-FR.pdf Resume-FR.png
-          convert -background white -alpha off Resume-EN.pdf Resume-EN.png
+          convert -density 90 -background white -alpha off Resume-FR.pdf Resume-FR.png -quality 90
+          convert -density 90 -background white -alpha off Resume-EN.pdf Resume-EN.png -quality 90
         
       - name: Commit the new generated files
         run: |
