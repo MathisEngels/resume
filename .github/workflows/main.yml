@@ -26,8 +26,9 @@ jobs:
           mv resume.pdf Resume-FR.pdf
           git config --global user.name '[bot]Actions'
           git config --global user.email 'mathisengels@users.noreply.github.com'
-          git commit -am "Compiled FR"
-          git push
+          git add Resume-FR.pdf
+          git commit -m "Compiled FR"
+          git push --force
 
   build_EN:
     runs-on: ubuntu-latest
@@ -50,5 +51,6 @@ jobs:
           mv resume.pdf Resume-EN.pdf
           git config --global user.name '[bot]Actions'
           git config --global user.email 'mathisengels@users.noreply.github.com'
-          git commit -am "Compiled EN"
-          git push
+          git add Resume-EN.pdf
+          git commit -m "Compiled EN"
+          git push --force
