@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build_FR:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Select FR version
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          find: "((languageSelection}{)+(fr|en))"
+          replace: "languageSelection}{fr"
+          include: "resume.tex"
+          regex: true
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: resume.tex
+      - name: Push the PDF
+        run: |
+          mv resume.pdf Resume-FR.pdf
+          git config --global user.name '[bot]Actions'
+          git config --global user.email 'mathisengels@users.noreply.github.com'
+          git commit -am "Compiled FR"
+          git push
+
+  build_EN:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Select EN version
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          find: "((languageSelection}{)+(fr|en))"
+          replace: "languageSelection}{en"
+          include: "resume.tex"
+          regex: true
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: resume.tex
+      - name: Push the PDF
+        run: |
+          mv resume.pdf Resume-EN.pdf
+          git config --global user.name '[bot]Actions'
+          git config --global user.email 'mathisengels@users.noreply.github.com'
+          git commit -am "Compiled EN"
+          git push
