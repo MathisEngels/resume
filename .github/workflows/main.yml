@@ -1,14 +1,15 @@
-name: CI
+name: CI/CD
 
 on:
   push:
     branches: [ "master" ]
 
 jobs:
-  build_FR:
+  buildFR:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
       - name: Select FR version
         uses: jacobtomlinson/gha-find-replace@v2
         with:
@@ -16,24 +17,14 @@ jobs:
           replace: "languageSelection}{fr"
           include: "resume.tex"
           regex: true
-      - name: Compile LaTeX document
+      - name: Compile FR Resume
         uses: xu-cheng/latex-action@v2
         with:
           root_file: resume.tex
           latexmk_use_lualatex: true
-      - name: Push the PDF
-        run: |
-          mv resume.pdf Resume-FR.pdf
-          git config --global user.name '[bot]Actions'
-          git config --global user.email 'mathisengels@users.noreply.github.com'
-          git add Resume-FR.pdf
-          git commit -m "Compiled FR"
-          git push --force
-
-  build_EN:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+      - name: Rename FR PDF
+        run: mv resume.pdf Resume-FR.pdf
+        
       - name: Select EN version
         uses: jacobtomlinson/gha-find-replace@v2
         with:
@@ -41,16 +32,34 @@ jobs:
           replace: "languageSelection}{en"
           include: "resume.tex"
           regex: true
-      - name: Compile LaTeX document
+      - name: Compile EN document
         uses: xu-cheng/latex-action@v2
         with:
           root_file: resume.tex
           latexmk_use_lualatex: true
-      - name: Push the PDF
+      - name: Rename EN PDF
+        run: mv resume.pdf Resume-EN.pdf
+        
+      - name: Install ghostscript
+        run: sudo apt install ghostscript
+      - name: Change ImageMagick security policy
         run: |
-          mv resume.pdf Resume-EN.pdf
-          git config --global user.name '[bot]Actions'
-          git config --global user.email 'mathisengels@users.noreply.github.com'
-          git add Resume-EN.pdf
-          git commit -m "Compiled EN"
-          git push --force
+          DQT='"' 
+          SRC="rights=${DQT}none${DQT} pattern=${DQT}PDF${DQT}"
+          RPL="rights=${DQT}read\|write${DQT} pattern=${DQT}PDF${DQT}"
+          sudo sed -i "s/$SRC/$RPL/" /etc/ImageMagick-6/policy.xml
+      - name: Convert PDF to PNG
+        run: |
+          convert -density 900 -background white -alpha off Resume-FR.pdf -quality 90 Resume-FR.png
+          convert -density 900 -background white -alpha off Resume-EN.pdf -quality 90 Resume-EN.png
+        
+      - name: Commit the new generated files
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add Resume-FR.pdf Resume-FR.png Resume-EN.pdf Resume-EN.png
+          git commit -m "[bot] updated the resume"
+      - name: Push Commit
+        uses: ad-m/github-push-action@master
+        with:
+           github_token: ${{ secrets.SECRET_TOKEN }}
