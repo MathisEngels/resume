@@ -23,7 +23,7 @@ jobs:
           root_file: resume.tex
           latexmk_use_lualatex: true
       - name: Rename FR PDF
-        run: mv resume.pdf Resume-FR.pdf
+        run: mv resume.pdf CV-ENGELS_Mathis.pdf
         
       - name: Select EN version
         uses: jacobtomlinson/gha-find-replace@v2
@@ -38,7 +38,7 @@ jobs:
           root_file: resume.tex
           latexmk_use_lualatex: true
       - name: Rename EN PDF
-        run: mv resume.pdf Resume-EN.pdf
+        run: mv resume.pdf Resume-ENGELS_Mathis.pdf
         
       - name: Install ghostscript
         run: sudo apt install ghostscript
@@ -50,14 +50,14 @@ jobs:
           sudo sed -i "s/$SRC/$RPL/" /etc/ImageMagick-6/policy.xml
       - name: Convert PDF to PNG
         run: |
-          convert -density 150 -background white -alpha off Resume-FR.pdf Resume-FR.png
-          convert -density 150 -background white -alpha off Resume-EN.pdf Resume-EN.png
+          convert -density 150 -background white -alpha off CV-ENGELS_Mathis.pdf CV-ENGELS_Mathis.png
+          convert -density 150 -background white -alpha off Resume-ENGELS_Mathis.pdf Resume-ENGELS_Mathis.png
         
       - name: Commit the new generated files
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add Resume-FR.pdf Resume-FR.png Resume-EN.pdf Resume-EN.png
+          git add CV-ENGELS_Mathis.pdf CV-ENGELS_Mathis.png Resume-ENGELS_Mathis.pdf Resume-ENGELS_Mathis.png
           git commit -m "Generated new PDFs and PNGs"
       - name: Push Commit
         uses: ad-m/github-push-action@master
