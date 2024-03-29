@@ -618,5 +618,4 @@
 }{%
   \end{itemize}
   \end{justify}
-  \vspace{-8.0mm}
 }
