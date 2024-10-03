@@ -21,7 +21,7 @@ jobs:
         uses: xu-cheng/latex-action@v2
         with:
           root_file: resume.tex
-          latexmk_use_lualatex: true
+          latexmk_use_xelatex: true
       - name: Rename FR PDF
         run: mv resume.pdf CV-ENGELS_Mathis.pdf
         
@@ -36,7 +36,7 @@ jobs:
         uses: xu-cheng/latex-action@v2
         with:
           root_file: resume.tex
-          latexmk_use_lualatex: true
+          latexmk_use_xelatex: true
       - name: Rename EN PDF
         run: mv resume.pdf Resume-ENGELS_Mathis.pdf
         
