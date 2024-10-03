@@ -501,7 +501,7 @@
         {}%
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{http://\@homepage}{\faHome\acvHeaderIconSep\@homepage}%
+          \href{https://\@homepage}{\faHome\acvHeaderIconSep\@homepage}%
         }%
       \ifthenelse{\isundefined{\@github}}%
         {}%
@@ -654,7 +654,7 @@
 
 % Define an environment for cventry
 \newenvironment{cventries}{%
-  \vspace{\acvSectionContentTopSkip}
+  \vspace{-0.5mm}
   \begin{center}
 }{%
   \end{center}
@@ -662,19 +662,34 @@
 % Define an entry of cv information
 % Usage: \cventry{<position>}{<title>}{<location>}{<date>}{<description>}
 \newcommand*{\cventry}[5]{%
-  \vspace{2.0mm}
+  \vspace{0.5mm}
   \setlength\tabcolsep{0pt}
   \setlength{\extrarowheight}{0pt}
   \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
     \ifempty{#2#3}
       {\entrypositionstyle{#1} & \entrydatestyle{#4} \\}
       {\entrytitlestyle{#2} & \entrylocationstyle{#3} \\
-      \entrypositionstyle{#1} & \entrydatestyle{#4} \\}
-    \ifstrempty{#5}
-      {}
-      {\multicolumn{2}{L{\textwidth}}{\descriptionstyle{#5}} \\}
+      \entrypositionstyle{#1} & \entrydatestyle{#4} \\}     
+\if\relax\detokenize{#5}\relax\else % THIS LINE ADDED TO CHECK IF LAST ARGUMENT IS EMPTY
+       \multicolumn{2}{L{\textwidth}}{\ifempty{#1}{\vskip-1\baselineskip}{}\descriptionstyle{#5}}% ONLY DO THIS IF #5 IS NOT EMPTY
+    \fi % END OF THE IF STATEMENT
   \end{tabular*}%
 }
+
+% Same as \cventry but without title and date
+% Usage: \cventry{<title>}{<location>}{<description>}
+\newcommand*{\cventrywithouttitleanddate}[3]{%
+  \vspace{0.5mm}
+  \setlength\tabcolsep{0pt}
+  \setlength{\extrarowheight}{0pt}
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
+    {\entrytitlestyle{#1} & \entrylocationstyle{#2} \\}
+    \ifstrempty{#3}
+      {}
+      {\multicolumn{2}{L{\textwidth}}{\vspace{-5mm}\descriptionstyle{#3}} \\}
+  \end{tabular*}%
+}
+
 
 % Define an environment for cvsubentry
 \newenvironment{cvsubentries}{%
@@ -728,6 +743,7 @@
     \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} r L{\textwidth * \real{0.9}}}
 }{%
     \end{tabular*}
+  \vspace{-5.0mm}
   \end{center}
 }
 % Define a line of cv information(skill)
@@ -738,7 +754,7 @@
 
 % Define an environment for cvitems(for cventry)
 \newenvironment{cvitems}{%
-  \vspace{-4.0mm}
+  \vspace{-5.0mm}
   \begin{justify}
   \begin{itemize}[leftmargin=2ex, nosep, noitemsep]
     \setlength{\parskip}{0pt}
@@ -746,7 +762,7 @@
 }{%
   \end{itemize}
   \end{justify}
-  \vspace{-4.0mm}
+  \vspace{-6.0mm}
 }
 
 
